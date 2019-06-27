@@ -1,6 +1,6 @@
 package com.sx.table.core.repository;
 
-import com.dling.teamcore.common.model.TableName;
+import com.sx.table.common.TableName;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
