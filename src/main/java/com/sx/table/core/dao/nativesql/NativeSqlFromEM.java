@@ -2,7 +2,6 @@ package com.sx.table.core.dao.nativesql;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.util.ArrayList;
@@ -12,15 +11,14 @@ import java.util.stream.Collectors;
 
 /**
  * 技术选择基本思路:
- *
+ * <p>
  * 使用原生sql做desc table;是因为jpa在对 "desc ?1"注入tablename的时候;会变成desc 'tablename'; 带了单引号导致语法错误
- *
+ * <p>
  * jpa对多表join并不灵活,需要在查的表的实体类内部做关联,不适合任意表之间join
- *
+ * <p>
  * 不使用类来存储信息而是HashMap;是因为类有哪些变量需要根据具体的表有哪些字段来定制,而HashMap可以根据不同的表的字段数动态扩张
- *
+ * <p>
  * 使用mycat做中间件,原生sql做join查询
- *
  *
  * @author sx
  */
@@ -33,41 +31,15 @@ public class NativeSqlFromEM {
 
 
     /**
-     * 展示表的字段信息
-     * @param tablename
-     * @return
-     */
-    public List<HashMap<String, String>> descTable(String tablename) {
-        Query query = entityManager.createNativeQuery("DESCRIBE " + tablename);
-        List<Object[]> list = query.getResultList();
-
-        String[] tableFeildNames = {"columnName", "type", "null", "primaryKey"};
-
-        List<HashMap<String, String>> hashMaps = new ArrayList<HashMap<String, String>>();
-
-        for (Object[] temp : list) {
-            HashMap<String, String> stringStringHashMap = new HashMap<>();
-            for (int i = 0; i < tableFeildNames.length; i++) {
-                if (null != temp[i]) {
-                    stringStringHashMap.put(tableFeildNames[i], temp[i].toString());
-                }else {
-                    stringStringHashMap.put(tableFeildNames[i], null);
-                }
-            }
-            hashMaps.add(stringStringHashMap);
-        }
-        return hashMaps;
-    }
-
-    /**
      * 展示数据库中所有的表
+     *
      * @param databaseName
      * @return
      */
     public List<HashMap<String, String>> showTables(String databaseName) {
         Query query = entityManager.createNativeQuery("show tables from " + databaseName);
 
-        //query.getResultList()的返回值有时候是list<String[]> 有时候是list<String>
+        //query.getResultList()的返回值有时候是list<String[]> 有时候是list<String>; 当返回单列的时候是list<String>
         List<String> list = query.getResultList();
         String tableFeildNames = "tableName";
 
@@ -87,12 +59,42 @@ public class NativeSqlFromEM {
     }
 
     /**
-     * show table data (select * from table;)
+     * 展示表的字段信息
+     *
+     * @param tablename
+     * @return
+     */
+    public List<HashMap<String, String>> descTable(String tablename) {
+        Query query = entityManager.createNativeQuery("DESCRIBE " + tablename);
+        List<Object[]> list = query.getResultList();
+
+        String[] tableFeildNames = {"columnName", "type", "null", "primaryKey"};
+
+        List<HashMap<String, String>> hashMaps = new ArrayList<HashMap<String, String>>();
+
+        for (Object[] temp : list) {
+            HashMap<String, String> stringStringHashMap = new HashMap<>();
+            for (int i = 0; i < tableFeildNames.length; i++) {
+                if (null != temp[i]) {
+                    stringStringHashMap.put(tableFeildNames[i], temp[i].toString());
+                } else {
+                    stringStringHashMap.put(tableFeildNames[i], null);
+                }
+            }
+            hashMaps.add(stringStringHashMap);
+        }
+        return hashMaps;
+    }
+
+    /**
+     * 展示表数据 (select * from table;)
+     *
      * @param tableName
      * @return
      */
-    public  List<HashMap<String, String>> selectTable(String tableName) {
+    public List<HashMap<String, String>> selectTable(String tableName) {
 
+        //把表的每个字段名查出来
         Query query = entityManager.createNativeQuery("desc " + tableName);
         List<Object[]> list = query.getResultList();
         List<String> tableColumnName = list.stream().map(arr -> {
@@ -100,10 +102,11 @@ public class NativeSqlFromEM {
         }).collect(Collectors.toList());
 
 
-
+        //把表的数据查出来
         query = entityManager.createNativeQuery("select * from " + tableName);
         list = query.getResultList();
 
+        //把表的字段名和数据拼在一起返回tableData
         List<HashMap<String, String>> tableData = new ArrayList<>();
 
         for (int j = 0; j < list.size(); j++) {
