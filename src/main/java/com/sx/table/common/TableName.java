@@ -16,6 +16,6 @@ public class TableName {
 //    @Column(name="Tables_in_teamcore")
     @Id
     @Column(name="Tables_in_teamcore")
-    private String Tables_in_teamcore;
+    private String tablename;
 
 }

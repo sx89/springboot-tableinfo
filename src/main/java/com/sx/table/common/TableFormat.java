@@ -36,4 +36,5 @@ public class TableFormat {
     @Column(name = "Comment")
     String Comment;
 
+
 }
