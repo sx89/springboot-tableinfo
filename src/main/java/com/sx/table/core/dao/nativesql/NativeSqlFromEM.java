@@ -11,10 +11,16 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
+ * 技术选择基本思路:
+ *
  * 使用原生sql做desc table;是因为jpa在对 "desc ?1"注入tablename的时候;会变成desc 'tablename'; 带了单引号导致语法错误
  *
+ * jpa对多表join并不灵活,需要在查的表的实体类内部做关联,不适合任意表之间join
  *
- * 使用原生sql做show table data是因为后续要做join操作,jpa对多表join并不灵活
+ * 不使用类来存储信息而是HashMap;是因为类有哪些变量需要根据具体的表有哪些字段来定制,而HashMap可以根据不同的表的字段数动态扩张
+ *
+ * 使用mycat做中间件,原生sql做join查询
+ *
  *
  * @author sx
  */
@@ -42,7 +48,11 @@ public class NativeSqlFromEM {
         for (Object[] temp : list) {
             HashMap<String, String> stringStringHashMap = new HashMap<>();
             for (int i = 0; i < tableFeildNames.length; i++) {
-                stringStringHashMap.put(tableFeildNames[i], temp[i].toString());
+                if (null != temp[i]) {
+                    stringStringHashMap.put(tableFeildNames[i], temp[i].toString());
+                }else {
+                    stringStringHashMap.put(tableFeildNames[i], null);
+                }
             }
             hashMaps.add(stringStringHashMap);
         }
@@ -72,6 +82,7 @@ public class NativeSqlFromEM {
             stringStringHashMap.put("类型", "空");
             hashMaps.add(stringStringHashMap);
         }
+
         return hashMaps;
     }
 
@@ -80,19 +91,36 @@ public class NativeSqlFromEM {
      * @param tableName
      * @return
      */
-    public List<String> selectTable(String tableName) {
+    public  List<HashMap<String, String>> selectTable(String tableName) {
 
-        Query query = entityManager.createNativeQuery("DESCRIBE " + tableName);
+        Query query = entityManager.createNativeQuery("desc " + tableName);
         List<Object[]> list = query.getResultList();
-        List<String> collect = list.stream().map(arr -> {
+        List<String> tableColumnName = list.stream().map(arr -> {
             return String.valueOf(arr[0]);
         }).collect(Collectors.toList());
 
-        //TODO select table
-        // TODO 把字段名和tabledata拼接并返回
 
 
-        return collect;
+        query = entityManager.createNativeQuery("select * from " + tableName);
+        list = query.getResultList();
+
+        List<HashMap<String, String>> tableData = new ArrayList<>();
+
+        for (int j = 0; j < list.size(); j++) {
+            HashMap<String, String> rowDataHash = new HashMap<>();
+            Object[] rowDataList = list.get(j);
+            for (int i = 0; i < tableColumnName.size(); i++) {
+                if (null != rowDataList[i]) {
+                    rowDataHash.put(tableColumnName.get(i), rowDataList[i].toString());
+                } else {
+                    rowDataHash.put(tableColumnName.get(i), null);
+
+                }
+
+            }
+            tableData.add(rowDataHash);
+        }
+        return tableData;
     }
 
 }

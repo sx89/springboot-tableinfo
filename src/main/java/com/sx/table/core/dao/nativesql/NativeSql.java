@@ -11,6 +11,13 @@ public class NativeSql {
     @Autowired
     protected DataSource dataSource;
 
+//    原生jdbc
+//    ResultSet rs = stmt.executeQuery("select * from emp");
+//    ResultSetMetaData rsmd = rs.getMetaData();
+//    System.out.println("No. of columns : " + rsmd.getColumnCount());
+//    System.out.println("Column name of 1st column : " + rsmd.getColumnName(1));
+//    System.out.println("Column type of 1st column : " + rsmd.getColumnTypeName(1));
+
     public void showTables() throws Exception {
         DatabaseMetaData metaData = dataSource.getConnection().getMetaData();
         ResultSet tables = metaData.getTables(null, null, null, new String[]{"TABLE"});

@@ -46,4 +46,10 @@ public class TableController {
         return hashMaps;
     }
 
+    @RequestMapping("/select*fromtable")
+    public List<HashMap<String, String>> selectTable(@Param("tableName") String tableName) {
+        List<HashMap<String, String>> tableData = nativeSqlFromEM.selectTable(tableName);
+        return tableData;
+    }
+
 }

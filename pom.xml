@@ -61,12 +61,12 @@
             <artifactId>spring-boot-devtools</artifactId>
             <optional>true</optional>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/javax.ws.rs/javax.ws.rs-api -->
-        <dependency>
-            <groupId>javax.ws.rs</groupId>
-            <artifactId>javax.ws.rs-api</artifactId>
-            <version>2.1</version>
-        </dependency>
+        <!--&lt;!&ndash; https://mvnrepository.com/artifact/javax.ws.rs/javax.ws.rs-api &ndash;&gt;-->
+        <!--<dependency>-->
+            <!--<groupId>javax.ws.rs</groupId>-->
+            <!--<artifactId>javax.ws.rs-api</artifactId>-->
+            <!--<version>2.1</version>-->
+        <!--</dependency>-->
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -156,36 +156,36 @@
         </dependency>
         <!-- mysql依赖接入End-->
         <!-- socialProd restful api Start -->
-        <dependency>
-            <groupId>com.dling.socialProd</groupId>
-            <artifactId>social-prod-rest-client</artifactId>
-            <version>1.0.9</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>commons-logging</groupId>
-                    <artifactId>commons-logging</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>com.vdurmont</groupId>
-            <artifactId>emoji-java</artifactId>
-            <version>3.1.3</version>
-        </dependency>
-        <dependency>
-            <groupId>com.mashape.unirest</groupId>
-            <artifactId>unirest-java</artifactId>
-            <version>1.4.9</version>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>com.dling.socialProd</groupId>-->
+            <!--<artifactId>social-prod-rest-client</artifactId>-->
+            <!--<version>1.0.9</version>-->
+            <!--<exclusions>-->
+                <!--<exclusion>-->
+                    <!--<groupId>commons-logging</groupId>-->
+                    <!--<artifactId>commons-logging</artifactId>-->
+                <!--</exclusion>-->
+            <!--</exclusions>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>com.vdurmont</groupId>-->
+            <!--<artifactId>emoji-java</artifactId>-->
+            <!--<version>3.1.3</version>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>com.mashape.unirest</groupId>-->
+            <!--<artifactId>unirest-java</artifactId>-->
+            <!--<version>1.4.9</version>-->
+        <!--</dependency>-->
         <!-- socialProd restful api End -->
 
         <!-- gitlab java api client start -->
         <!-- https://mvnrepository.com/artifact/org.gitlab4j/gitlab4j-api -->
-        <dependency>
-            <groupId>org.gitlab4j</groupId>
-            <artifactId>gitlab4j-api</artifactId>
-            <version>4.9.10</version>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.gitlab4j</groupId>-->
+            <!--<artifactId>gitlab4j-api</artifactId>-->
+            <!--<version>4.9.10</version>-->
+        <!--</dependency>-->
         <!-- gitlab java api client end -->
 
         <!-- 对象与JSON之间相互转换 start -->
@@ -233,58 +233,59 @@
             <version>8.18.0</version>
         </dependency>
 
-        <!-- opencmis 开始 -->
-        <dependency>
-            <groupId>org.apache.chemistry.opencmis</groupId>
-            <artifactId>chemistry-opencmis-client-impl</artifactId>
-            <version>1.1.0</version>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/org.alfresco.cmis.client/alfresco-opencmis-extension -->
-        <dependency>
-            <groupId>org.alfresco.cmis.client</groupId>
-            <artifactId>alfresco-opencmis-extension</artifactId>
-            <version>1.0</version>
-        </dependency>
+        <!--&lt;!&ndash; opencmis 开始 &ndash;&gt;-->
+        <!--<dependency>-->
+            <!--<groupId>org.apache.chemistry.opencmis</groupId>-->
+            <!--<artifactId>chemistry-opencmis-client-impl</artifactId>-->
+            <!--<version>1.1.0</version>-->
+        <!--</dependency>-->
+        <!--&lt;!&ndash; https://mvnrepository.com/artifact/org.alfresco.cmis.client/alfresco-opencmis-extension &ndash;&gt;-->
+        <!--<dependency>-->
+            <!--<groupId>org.alfresco.cmis.client</groupId>-->
+            <!--<artifactId>alfresco-opencmis-extension</artifactId>-->
+            <!--<version>1.0</version>-->
+        <!--</dependency>-->
 
-        <dependency>
-            <groupId>com.google.http-client</groupId>
-            <artifactId>google-http-client-jackson</artifactId>
-            <version>1.16.0-rc</version>
-        </dependency>
-        <!-- opencmis 结束 -->
+        <!--<dependency>-->
+            <!--<groupId>com.google.http-client</groupId>-->
+            <!--<artifactId>google-http-client-jackson</artifactId>-->
+            <!--<version>1.16.0-rc</version>-->
+        <!--</dependency>-->
+        <!--&lt;!&ndash; opencmis 结束 &ndash;&gt;-->
 
-        <!-- dwg文件解析库开始 -->
-        <dependency>
-            <groupId>com.1spatial</groupId>
-            <artifactId>dwg-lib</artifactId>
-            <version>0.8</version>
-        </dependency>
-        <!-- dwg文件解析库结束 -->
+        <!--&lt;!&ndash; dwg文件解析库开始 &ndash;&gt;-->
+        <!--<dependency>-->
+            <!--<groupId>com.1spatial</groupId>-->
+            <!--<artifactId>dwg-lib</artifactId>-->
+            <!--<version>0.8</version>-->
+        <!--</dependency>-->
+        <!--&lt;!&ndash; dwg文件解析库结束 &ndash;&gt;-->
 
 
 
-        <!-- 权限控制 -->
-        <dependency>
-            <groupId>com.dling.security</groupId>
-            <artifactId>security-client</artifactId>
-            <version>0.1.8</version>
-        </dependency>
-        <!-- 权限控制结束 -->
+        <!--&lt;!&ndash; 权限控制 &ndash;&gt;-->
+        <!--<dependency>-->
+            <!--<groupId>com.dling.security</groupId>-->
+            <!--<artifactId>security-client</artifactId>-->
+            <!--<version>0.1.8</version>-->
+        <!--</dependency>-->
+        <!--&lt;!&ndash; 权限控制结束 &ndash;&gt;-->
 
-        <!--elasticSearch依赖-->
-        <dependency>
-            <groupId>org.elasticsearch.client</groupId>
-            <artifactId>transport</artifactId>
-            <version>5.6.3</version>
-        </dependency>
-        <!--elasticsearch依赖结束-->
-        <!--dom4j依赖-->
-        <dependency>
-            <groupId>dom4j</groupId>
-            <artifactId>dom4j</artifactId>
-            <version>1.6.1</version>
-        </dependency>
-        <!--dom4j依赖结束-->
+        <!--&lt;!&ndash;elasticSearch依赖&ndash;&gt;-->
+        <!--<dependency>-->
+            <!--<groupId>org.elasticsearch.client</groupId>-->
+            <!--<artifactId>transport</artifactId>-->
+            <!--<version>5.6.3</version>-->
+        <!--</dependency>-->
+        <!--&lt;!&ndash;elasticsearch依赖结束&ndash;&gt;-->
+
+        <!--&lt;!&ndash;dom4j依赖&ndash;&gt;-->
+        <!--<dependency>-->
+            <!--<groupId>dom4j</groupId>-->
+            <!--<artifactId>dom4j</artifactId>-->
+            <!--<version>1.6.1</version>-->
+        <!--</dependency>-->
+        <!--&lt;!&ndash;dom4j依赖结束&ndash;&gt;-->
 
 
 
