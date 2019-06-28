@@ -13,9 +13,9 @@ import javax.persistence.Id;
 @Getter
 @Setter
 public class TableName {
-//    @Column(name="Tables_in_teamcore")
+    //    @Column(name="Tables_in_teamcore")
     @Id
-    @Column(name="Tables_in_teamcore")
+    @Column(name = "Tables_in_teamcore")
     private String tablename;
 
 }

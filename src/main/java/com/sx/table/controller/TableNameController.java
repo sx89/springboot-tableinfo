@@ -3,7 +3,6 @@ package com.sx.table.controller;
 import com.sx.table.common.TableName;
 import com.sx.table.core.repository.NativeSqlFromEM;
 import com.sx.table.core.repository.TableNameRepository;
-import org.apache.cxf.management.annotation.ManagedOperationParameter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,7 +33,7 @@ public class TableNameController {
     @RequestMapping("/showtables")
     public List<HashMap<String, String>> showTables(@Param("databaseName") String databaseName) {
         List<HashMap<String, String>> hashMaps = nativeSqlFromEM.showTables(databaseName);
-        return  hashMaps;
+        return hashMaps;
     }
 
 

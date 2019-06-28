@@ -1,28 +1,20 @@
 package com.sx.table.core.repository;
 
-import com.sx.table.common.TableFormat;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import javax.persistence.Table;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
- *
  * 使用原生sql做desc table;是因为jpa在对 "desc ?1"注入tablename的时候;会变成desc 'tablename'; 带了单引号导致语法错误
- *
+ * <p>
  * 使用原生sql做show table data是因为后续要做join操作,jpa对多表join并不灵活
  *
- * @author  sx
- *
+ * @author sx
  */
 @Service
 public class NativeSqlFromEM {
@@ -50,7 +42,6 @@ public class NativeSqlFromEM {
     }
 
     /**
-     *
      * @param databaseName
      * @return
      */
@@ -68,8 +59,8 @@ public class NativeSqlFromEM {
 
             HashMap<String, String> stringStringHashMap = new HashMap<>();
             stringStringHashMap.put(tableFeildNames, temp);
-            stringStringHashMap.put("模型说明","空");
-            stringStringHashMap.put("类型","空");
+            stringStringHashMap.put("模型说明", "空");
+            stringStringHashMap.put("类型", "空");
             hashMaps.add(stringStringHashMap);
         }
         return hashMaps;

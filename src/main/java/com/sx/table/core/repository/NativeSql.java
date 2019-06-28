@@ -13,13 +13,13 @@ public class NativeSql {
 
     public void showTables() throws Exception {
         DatabaseMetaData metaData = dataSource.getConnection().getMetaData();
-        ResultSet tables = metaData.getTables(null, null, null, new String[] { "TABLE" });
+        ResultSet tables = metaData.getTables(null, null, null, new String[]{"TABLE"});
         while (tables.next()) {
-            String tableName=tables.getString("TABLE_NAME");
+            String tableName = tables.getString("TABLE_NAME");
             System.out.println(tableName);
-            ResultSet columns = metaData.getColumns(null,  null,  tableName, "%");
+            ResultSet columns = metaData.getColumns(null, null, tableName, "%");
             while (columns.next()) {
-                String columnName=columns.getString("COLUMN_NAME");
+                String columnName = columns.getString("COLUMN_NAME");
                 System.out.println("\t" + columnName);
             }
         }
