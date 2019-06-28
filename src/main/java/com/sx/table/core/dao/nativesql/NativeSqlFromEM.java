@@ -1,4 +1,4 @@
-package com.sx.table.core.repository;
+package com.sx.table.core.dao.nativesql;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -8,10 +8,12 @@ import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 使用原生sql做desc table;是因为jpa在对 "desc ?1"注入tablename的时候;会变成desc 'tablename'; 带了单引号导致语法错误
- * <p>
+ *
+ *
  * 使用原生sql做show table data是因为后续要做join操作,jpa对多表join并不灵活
  *
  * @author sx
@@ -23,6 +25,12 @@ public class NativeSqlFromEM {
     @Autowired
     private EntityManager entityManager;
 
+
+    /**
+     * 展示表的字段信息
+     * @param tablename
+     * @return
+     */
     public List<HashMap<String, String>> descTable(String tablename) {
         Query query = entityManager.createNativeQuery("DESCRIBE " + tablename);
         List<Object[]> list = query.getResultList();
@@ -42,6 +50,7 @@ public class NativeSqlFromEM {
     }
 
     /**
+     * 展示数据库中所有的表
      * @param databaseName
      * @return
      */
@@ -65,6 +74,27 @@ public class NativeSqlFromEM {
         }
         return hashMaps;
     }
+
+    /**
+     * show table data (select * from table;)
+     * @param tableName
+     * @return
+     */
+    public List<String> selectTable(String tableName) {
+
+        Query query = entityManager.createNativeQuery("DESCRIBE " + tableName);
+        List<Object[]> list = query.getResultList();
+        List<String> collect = list.stream().map(arr -> {
+            return String.valueOf(arr[0]);
+        }).collect(Collectors.toList());
+
+        //TODO select table
+        // TODO 把字段名和tabledata拼接并返回
+
+
+        return collect;
+    }
+
 }
 
 

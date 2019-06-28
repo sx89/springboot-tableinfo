@@ -1,8 +1,8 @@
 package com.sx.table.controller;
 
 import com.sx.table.common.TableFormat;
-import com.sx.table.core.repository.NativeSqlFromEM;
-import com.sx.table.core.repository.TableFormatRepository;
+import com.sx.table.core.dao.nativesql.NativeSqlFromEM;
+import com.sx.table.core.dao.jpa.TableFormatRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,11 +14,12 @@ import java.util.List;
 
 /**
  * 展示数据表每个字段的格式和名称
+ * 展示数据的表和数据
  *
  * @author sx
  */
 @RestController
-public class TableFormatController {
+public class TableController {
 
     @Autowired
     TableFormatRepository tableFormatRepository;
@@ -36,6 +37,13 @@ public class TableFormatController {
     public List<HashMap<String, String>> showTablesEM(@Param("tablename") String tablename) {
         List<HashMap<String, String>> tableFormatList = nativeSqlFromEM.descTable(tablename);
         return tableFormatList;
+    }
+
+
+    @RequestMapping("/showtables")
+    public List<HashMap<String, String>> showTables(@Param("databaseName") String databaseName) {
+        List<HashMap<String, String>> hashMaps = nativeSqlFromEM.showTables(databaseName);
+        return hashMaps;
     }
 
 }

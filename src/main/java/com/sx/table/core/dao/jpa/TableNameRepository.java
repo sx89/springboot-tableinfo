@@ -1,4 +1,4 @@
-package com.sx.table.core.repository;
+package com.sx.table.core.dao.jpa;
 
 import com.sx.table.common.TableName;
 import org.springframework.data.jpa.repository.JpaRepository;
