@@ -1,5 +1,6 @@
 package com.sx.table.core.dao.nativesql;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import javax.persistence.EntityManager;
@@ -40,7 +41,13 @@ public class NativeSqlFromEM {
      * @return
      */
     public List<HashMap<String, String>> showTables(String databaseName) {
-        Query query = entityManager.createNativeQuery("show tables from " + databaseName);
+        Query query;
+        if (StringUtils.isEmpty(databaseName)) {
+            query = entityManager.createNativeQuery("show tables;");
+        }else {
+
+            query = entityManager.createNativeQuery("show tables from " + databaseName);
+        }
 
         //query.getResultList()的返回值有时候是list<String[]> 有时候是list<String>; 当返回单列的时候是list<String>
         List<String> list = query.getResultList();
@@ -68,6 +75,10 @@ public class NativeSqlFromEM {
      * @return
      */
     public List<HashMap<String, String>> descTable(String tablename) {
+
+        if (StringUtils.isEmpty(tablename)) {
+            return null;
+        }
         Query query = entityManager.createNativeQuery("DESCRIBE " + tablename);
         List<Object[]> list = query.getResultList();
 
@@ -96,7 +107,9 @@ public class NativeSqlFromEM {
      * @return
      */
     public List<HashMap<String, String>> selectTable(String tableName) {
-
+        if (StringUtils.isEmpty(tableName)) {
+            return null;
+        }
         //把表的每个字段名查出来
         Query query = entityManager.createNativeQuery("desc " + tableName);
         List<Object[]> list = query.getResultList();
