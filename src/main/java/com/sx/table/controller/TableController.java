@@ -1,5 +1,7 @@
 package com.sx.table.controller;
 
+import com.sx.table.biz.TableBiz;
+import com.sx.table.biz.impl.TableBizImpl;
 import com.sx.table.common.TableFormat;
 import com.sx.table.core.dao.nativesql.NativeSqlFromEM;
 import com.sx.table.core.dao.jpa.TableFormatRepository;
@@ -25,6 +27,9 @@ public class TableController {
     TableFormatRepository tableFormatRepository;
 
     @Autowired
+    TableBiz tableBiz;
+
+    @Autowired
     NativeSqlFromEM nativeSqlFromEM;
 
     @RequestMapping("tableformat/test")
@@ -34,21 +39,21 @@ public class TableController {
     }
 
     @RequestMapping("tableformat/desctable(em)")
-    public List<HashMap<String, String>> showTablesEM(@Param("tablename") String tablename) {
-        List<HashMap<String, String>> tableFormatList = nativeSqlFromEM.descTable(tablename);
+    public List<HashMap<String, String>> descTable(@Param("tablename") String tablename) {
+        List<HashMap<String, String>> tableFormatList = tableBiz.descTable(tablename);
         return tableFormatList;
     }
 
 
     @RequestMapping("/showtables")
     public List<HashMap<String, String>> showTables(@Param("databaseName") String databaseName) {
-        List<HashMap<String, String>> hashMaps = nativeSqlFromEM.showTables(databaseName);
+        List<HashMap<String, String>> hashMaps = tableBiz.showTables(databaseName);
         return hashMaps;
     }
 
     @RequestMapping("/select*fromtable")
     public List<HashMap<String, String>> selectTable(@Param("tableName") String tableName) {
-        List<HashMap<String, String>> tableData = nativeSqlFromEM.selectTable(tableName);
+        List<HashMap<String, String>> tableData = tableBiz.selectTable(tableName);
         return tableData;
     }
 

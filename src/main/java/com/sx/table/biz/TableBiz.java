@@ -10,6 +10,23 @@ import java.util.List;
  * @date 19/6/28/028 14:03
  */
 public interface TableBiz {
+
     List<HashMap> showJoinTableData();
 
+    /**
+     * descTable
+     */
+    List<HashMap<String, String>> descTable(String tableName);
+
+
+
+    /**
+     * show tables;
+     */
+    List<HashMap<String, String>> showTables(String databaseName);
+
+    /**
+     * select * from Table;
+     */
+    List<HashMap<String, String>> selectTable(String tableName);
 }
