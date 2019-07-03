@@ -3,6 +3,8 @@ package com.sx.table.biz.impl;
 import com.sx.table.biz.TableBiz;
 import com.sx.table.core.dao.jpa.TableNameRepository;
 import com.sx.table.core.dao.nativesql.NativeSqlFromEM;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +17,8 @@ import java.util.List;
  */
 @Service
 public class TableBizImpl implements TableBiz {
+    private static final Logger logger = LoggerFactory.getLogger(TableBizImpl.class);
+
     @Autowired
     NativeSqlFromEM nativeSqlFromEM;
 
@@ -25,9 +29,13 @@ public class TableBizImpl implements TableBiz {
 
     @Override
     public List<HashMap<String, String>> descTable(String tableName) {
-        List<HashMap<String, String>> hashMaps = nativeSqlFromEM.descTable(tableName);
-
-        return hashMaps;
+        try {
+            List<HashMap<String, String>> hashMaps = nativeSqlFromEM.descTable(tableName);
+            return hashMaps;
+        } catch (Exception e) {
+            logger.error("TableBizImpl[descTable] error", e);
+            return null;
+        }
     }
 
     @Override
