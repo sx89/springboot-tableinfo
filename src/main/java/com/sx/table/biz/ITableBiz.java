@@ -9,7 +9,7 @@ import java.util.List;
  * @author sunxu93@163.com
  * @date 19/6/28/028 14:03
  */
-public interface TableBiz {
+public interface ITableBiz {
 
     List<HashMap> showJoinTableData();
 
