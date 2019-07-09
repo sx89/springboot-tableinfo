@@ -4,7 +4,7 @@
 ![](pic/Snipaste_2019-06-28_16-10-56.jpg)
 # Exception的知识点
 ## try,catch,finally的执行顺序
-[参考链接](http://www.blogjava.net/fancydeepin/archive/2012/07/08/java_try-catch-finally.html)
+[try,catch,finally的执行顺序参考博文](http://www.blogjava.net/fancydeepin/archive/2012/07/08/java_try-catch-finally.html)
 
 >(假设方法需要返回值）
 java 的异常处理中，  
@@ -14,3 +14,9 @@ java 的异常处理中，
 若 finally 代码块里有 return 或含有能够终止程序的代码，方法将在执行完 finally 之后被结束，不再跳回 try 代码块执行 return。  
 >在抛出异常的情况下，原理也是和上面的一样的，你把上面说到的 try 换成 catch 去理解就 OK 了
 
+## 运行时异常与编译时异常
+
+[运行时异常与编译时异常参考博文](https://blog.csdn.net/wsad578169903/article/details/67645767)
+
+
+111
