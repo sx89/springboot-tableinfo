@@ -1,8 +1,14 @@
 package com.sx.table.core.dao.nativesql;
 
+import com.sx.table.common.ColumnInfo;
+import com.sx.table.common.ErrorCode;
+import com.sx.table.common.MyException;
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.util.ArrayList;
@@ -29,6 +35,7 @@ import java.util.stream.Collectors;
 @Service
 public class NativeSqlFromEM {
 
+    public static final Logger logger = LoggerFactory.getLogger(NativeSqlFromEM.class);
 
     @Autowired
     private EntityManager entityManager;
@@ -140,6 +147,64 @@ public class NativeSqlFromEM {
             tableData.add(rowDataHash);
         }
         return tableData;
+    }
+
+    /**
+     * alter table user add COLUMN new1 VARCHAR(20) DEFAULT NULL NOT NULL COMMENT '123';
+     * 增加字段,并把新的字段信息返回回去
+     */
+    public Boolean createColum(ColumnInfo columnInfo) {
+        try {
+            //TODO  for循环中用append  像这种可读性很差的,我应该用字符串+ 的形式的
+            StringBuilder sql = new StringBuilder();
+            sql.append("alter table ");
+            sql.append(columnInfo.getBelongTable());
+            sql.append(" add column ");
+            sql.append(columnInfo.getName() + " ");
+
+            sql.append(columnInfo.getType() + "(" + columnInfo.getTypeLength() + ") ");
+            // TODO 默认值区分字符和数字
+            if (!StringUtils.isEmpty(columnInfo.getDefaultValue())) {
+                sql.append("default " + columnInfo.getDefaultValue() + " ");
+            }
+            if (!columnInfo.getEnableNull()) {
+                sql.append(" not null ");
+            }
+            if (!StringUtils.isEmpty(columnInfo.getComment())) {
+                sql.append(" comment ");
+                sql.append("\'" + columnInfo.getComment() + "\';");
+            }
+            Query query = entityManager.createNativeQuery(sql.toString());
+            return true;
+        } catch (Exception e) {
+            logger.error("创建字段失败",e);
+            return false;
+        }
+    }
+
+    /**
+     * 删除一个字段
+     * alter table user DROP COLUMN new2;
+     * @param columnInfo
+     * @return
+     */
+    public Boolean deleteColumn(ColumnInfo columnInfo) {
+        String sql = null;
+        String belongTable = columnInfo.getBelongTable();
+        String name = columnInfo.getName();
+        if (columnInfo == null||StringUtils.isEmpty(belongTable) || StringUtils.isEmpty(name)) {
+            logger.error("传入参数为空", new MyException(ErrorCode.ERROR_PARAM_NULL));
+            return false;
+        }
+        try {
+            sql = "alter table " + belongTable + " drop colum " + name + " ;";
+            entityManager.createNativeQuery(sql);
+            return true;
+        } catch (Exception e) {
+            logger.error("删除字段失败", e);
+            return false;
+        }
+
     }
 
 }
