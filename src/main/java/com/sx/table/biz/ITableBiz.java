@@ -1,5 +1,8 @@
 package com.sx.table.biz;
 
+import com.sx.table.common.exception.MyException;
+import com.sx.table.common.model.CrudColumnInfo;
+
 import java.util.HashMap;
 import java.util.List;
 
@@ -17,39 +20,39 @@ public interface ITableBiz {
      */
     List<HashMap<String, String>> showTables(String databaseName);
 
-    /**
-     * 查找表的数据
-     */
-    List<HashMap<String, String>> selectFromTable(String tableName);
-
 
     /**
      * 拿到表所有的字段
      */
     List<HashMap<String, String>> getAllColumn(String tableName);
 
-//    /**
-//     * 创建新字段
-//     * @param columnInfo
-//     * @return
-//     */
-//    Boolean createColumn(ColumnInfo columnInfo) throws MyException;
-//
-//    /**
-//     * 更新字段信息
-//     * @param columnInfo
-//     * @return
-//     */
-//    Boolean updateColumn(ColumnInfo columnInfo)throws MyException;
-//
-//    /**
-//     * 删除字段
-//     * @param conlumnInfo
-//     * @return
-//     */
-//    Boolean deleteColumn(ColumnInfo conlumnInfo) throws MyException;
-//
-//
+    /**
+     * 查找表的数据
+     */
+    List<HashMap<String, String>> selectFromTable(String tableName);
+
+    /**
+     * 创建新字段
+     * @param columnInfo
+     * @return
+     */
+    Boolean createColumn(CrudColumnInfo columnInfo) throws MyException;
+
+    /**
+     * 更新字段信息
+     * @param columnInfo
+     * @return
+     */
+    Boolean updateColumn(CrudColumnInfo columnInfo)throws MyException;
+
+    /**
+     * 删除字段
+     * @param conlumnInfo
+     * @return
+     */
+    Boolean deleteColumn(CrudColumnInfo conlumnInfo) throws MyException;
+
+
 //    /**
 //     * 展示表的join信息
 //     * @return
@@ -63,5 +66,5 @@ public interface ITableBiz {
 //     * @return
 //     */
 //
-//    Object createTable(String tableName, List<ColumnInfo> list);
+//    Object createTable(String tableName, List<CrudColumnInfo> list);
 }

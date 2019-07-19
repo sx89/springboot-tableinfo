@@ -2,7 +2,7 @@ package com.sx.table.core.dao;
 
 import com.sx.table.common.enums.ErrorCode;
 import com.sx.table.common.exception.MyException;
-import com.sx.table.common.model.ColumnInfo;
+import com.sx.table.common.model.CrudColumnInfo;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,30 +49,36 @@ public class NativeSqlFromEM {
      */
     public List<HashMap<String, String>> showTables(String databaseName) {
         Query query;
-        if (StringUtils.isEmpty(databaseName)) {
-            query = entityManager.createNativeQuery("show tables;");
-        }else {
+        try {
+            if (StringUtils.isEmpty(databaseName)) {
+                query = entityManager.createNativeQuery("show tables;");
+            }else {
 
-            query = entityManager.createNativeQuery("show tables from " + databaseName);
+                query = entityManager.createNativeQuery("show tables from " + databaseName);
+            }
+
+            //query.getResultList()的返回值有时候是list<String[]> 有时候是list<String>; 当返回单列的时候是list<String>
+            List<String> list = query.getResultList();
+            String tableFeildNames = "tableName";
+
+            List<HashMap<String, String>> hashMaps = new ArrayList<HashMap<String, String>>();
+
+            for (int j = 0; j < list.size(); j++) {
+                String temp = list.get(j);
+
+                HashMap<String, String> stringStringHashMap = new HashMap<>();
+                stringStringHashMap.put(tableFeildNames, temp);
+                //TODO 数据将来从另一个数据表获取填充
+                stringStringHashMap.put("模型说明", "空");
+                stringStringHashMap.put("类型", "空");
+                hashMaps.add(stringStringHashMap);
+            }
+
+            return hashMaps;
+        } catch (Exception e) {
+            logger.error("获取数据表失败", e);
+            return null;
         }
-
-        //query.getResultList()的返回值有时候是list<String[]> 有时候是list<String>; 当返回单列的时候是list<String>
-        List<String> list = query.getResultList();
-        String tableFeildNames = "tableName";
-
-        List<HashMap<String, String>> hashMaps = new ArrayList<HashMap<String, String>>();
-
-        for (int j = 0; j < list.size(); j++) {
-            String temp = list.get(j);
-
-            HashMap<String, String> stringStringHashMap = new HashMap<>();
-            stringStringHashMap.put(tableFeildNames, temp);
-            stringStringHashMap.put("模型说明", "空");
-            stringStringHashMap.put("类型", "空");
-            hashMaps.add(stringStringHashMap);
-        }
-
-        return hashMaps;
     }
 
     /**
@@ -81,30 +87,41 @@ public class NativeSqlFromEM {
      * @param tablename
      * @return
      */
-    public List<HashMap<String, String>> descTable(String tablename) {
+    public List<HashMap<String, String>> descTable(String tablename) throws MyException {
 
         if (StringUtils.isEmpty(tablename)) {
-            return null;
+            throw new MyException("传入参数为空", ErrorCode.ERROR_PARAM_NULL);
         }
         Query query = entityManager.createNativeQuery("DESCRIBE " + tablename);
         List<Object[]> list = query.getResultList();
 
-        String[] tableFeildNames = {"columnName", "type", "null", "primaryKey"};
+        String[] tableFeildNames = {"columnName", "type", "null", "primaryKey", "comment"};
 
-        List<HashMap<String, String>> hashMaps = new ArrayList<HashMap<String, String>>();
+        List<HashMap<String, String>> hashMaps = new ArrayList<>();
 
-        for (Object[] temp : list) {
-            HashMap<String, String> stringStringHashMap = new HashMap<>();
-            for (int i = 0; i < tableFeildNames.length; i++) {
-                if (null != temp[i]) {
-                    stringStringHashMap.put(tableFeildNames[i], temp[i].toString());
-                } else {
-                    stringStringHashMap.put(tableFeildNames[i], null);
+        try {
+            for (Object[] temp : list) {
+                HashMap<String, String> stringStringHashMap = new HashMap<>();
+
+                for (int i = 0; i < tableFeildNames.length; i++) {
+                    //TODO 如果要填充comment了,那就暂时填充null,并跳过,后面从其他数据库获取注释信息
+                    if (i == tableFeildNames.length - 1) {
+                        stringStringHashMap.put(tableFeildNames[i], "");
+                        continue;
+                    }
+                    if (null != temp[i]) {
+                        stringStringHashMap.put(tableFeildNames[i], temp[i].toString());
+                    } else {
+                        stringStringHashMap.put(tableFeildNames[i], "");
+                    }
                 }
+                hashMaps.add(stringStringHashMap);
             }
-            hashMaps.add(stringStringHashMap);
+            return hashMaps;
+        } catch (Exception e) {
+            logger.error("获取数据表字段失败", e);
+            return null;
         }
-        return hashMaps;
     }
 
     /**
@@ -113,47 +130,52 @@ public class NativeSqlFromEM {
      * @param tableName
      * @return
      */
-    public List<HashMap<String, String>> selectTable(String tableName) {
+    public List<HashMap<String, String>> selectTable(String tableName) throws MyException {
         if (StringUtils.isEmpty(tableName)) {
-            return null;
+            throw new MyException(ErrorCode.ERROR_PARAM_NULL);
         }
-        //把表的每个字段名查出来
-        Query query = entityManager.createNativeQuery("desc " + tableName);
-        List<Object[]> list = query.getResultList();
-        List<String> tableColumnName = list.stream().map(arr -> {
-            return String.valueOf(arr[0]);
-        }).collect(Collectors.toList());
+        try {
+            //把表的每个字段名查出来
+            Query query = entityManager.createNativeQuery("desc " + tableName);
+            List<Object[]> list = query.getResultList();
+            List<String> tableColumnName = list.stream().map(arr -> {
+                return String.valueOf(arr[0]);
+            }).collect(Collectors.toList());
 
 
-        //把表的数据查出来
-        query = entityManager.createNativeQuery("select * from " + tableName);
-        list = query.getResultList();
+            //把表的数据查出来
+            query = entityManager.createNativeQuery("select * from " + tableName);
+            list = query.getResultList();
 
-        //把表的字段名和数据拼在一起返回tableData
-        List<HashMap<String, String>> tableData = new ArrayList<>();
+            //把表的字段名和数据拼在一起返回tableData
+            List<HashMap<String, String>> tableData = new ArrayList<>();
 
-        for (int j = 0; j < list.size(); j++) {
-            HashMap<String, String> rowDataHash = new HashMap<>();
-            Object[] rowDataList = list.get(j);
-            for (int i = 0; i < tableColumnName.size(); i++) {
-                if (null != rowDataList[i]) {
-                    rowDataHash.put(tableColumnName.get(i), rowDataList[i].toString());
-                } else {
-                    rowDataHash.put(tableColumnName.get(i), null);
+            for (int j = 0; j < list.size(); j++) {
+                HashMap<String, String> rowDataHash = new HashMap<>();
+                Object[] rowDataList = list.get(j);
+                for (int i = 0; i < tableColumnName.size(); i++) {
+                    if (null != rowDataList[i]) {
+                        rowDataHash.put(tableColumnName.get(i), rowDataList[i].toString());
+                    } else {
+                        rowDataHash.put(tableColumnName.get(i), null);
+
+                    }
 
                 }
-
+                tableData.add(rowDataHash);
             }
-            tableData.add(rowDataHash);
+            return tableData;
+        } catch (Exception e) {
+            logger.error("获取数据表信息失败", e);
+            return null;
         }
-        return tableData;
     }
 
     /**
      * alter table user add COLUMN new1 VARCHAR(20) DEFAULT NULL NOT NULL COMMENT '123';
      * 增加字段,并把新的字段信息返回回去
      */
-    public Boolean createColum(ColumnInfo columnInfo) {
+    public Boolean createColum(CrudColumnInfo columnInfo) {
         try {
             //TODO  for循环中用append  像这种可读性很差的,我应该用字符串+ 的形式的
             StringBuilder sql = new StringBuilder();
@@ -188,7 +210,7 @@ public class NativeSqlFromEM {
      * @param columnInfo
      * @return
      */
-    public Boolean deleteColumn(ColumnInfo columnInfo) {
+    public Boolean deleteColumn(CrudColumnInfo columnInfo) {
         String sql = null;
         String belongTable = columnInfo.getBelongTable();
         String name = columnInfo.getName();

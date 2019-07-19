@@ -5,7 +5,7 @@ package com.sx.table.common.model;
  * @author sunxu93@163.com
  * @date 19/7/12/012 11:46
  */
-public class ColumnInfo {
+public class CrudColumnInfo {
     private  String belongTable;
     private String type;
     //TODO 可能是int
@@ -15,7 +15,7 @@ public class ColumnInfo {
     private String comment;
     private Boolean enableNull;
 
-    public ColumnInfo() {
+    public CrudColumnInfo() {
     }
 
     public String getDefaultValue() {

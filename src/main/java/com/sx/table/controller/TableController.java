@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 展示数据表每个字段的格式和名称
@@ -66,10 +67,10 @@ public class TableController {
         try {
         List<HashMap<String, String>> tableFormatList = tableBiz.getAllColumn(tablename);
         return new Result(tableFormatList,true,"获取字段信息成功");
-    } catch (Exception e) {
+        } catch (Exception e) {
         logger.error("TableController[showTableFormat]",e);
         return new Result(false, "获取字段信息失败");
-    }
+        }
     }
 
     @RequestMapping("/selectfromtable")
@@ -82,6 +83,8 @@ public class TableController {
             logger.error("TableController[showTableFormat]",e);
             return new Result(false, "获取数据库表数据失败");
         }
+
+
     }
 
 
@@ -90,7 +93,7 @@ public class TableController {
 
 //    @ResponseBody
 //    @RequestMapping("/createColumn")
-//    public Result createColum(@Param("columnIfo") ColumnInfo columnInfo) {
+//    public Result createColum(@Param("columnIfo") CrudColumnInfo columnInfo) {
 //        try {
 //            Boolean result = (Boolean)tableBiz.createColumn(columnInfo);
 //            if (!result) {
@@ -109,7 +112,7 @@ public class TableController {
 //    //TODO 删除前端传入的值 有些可以为空
 //    @ResponseBody
 //    @RequestMapping("/deleteColumn")
-//    public Result deleteColumn(@Param("columnIfo") ColumnInfo columnInfo) {
+//    public Result deleteColumn(@Param("columnIfo") CrudColumnInfo columnInfo) {
 //        try {
 //            Boolean result = (Boolean)tableBiz.deleteColumn(columnInfo);
 //            if (!result) {
