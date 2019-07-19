@@ -1,12 +1,10 @@
 package com.sx.table.controller;
 
 import com.sx.table.biz.ITableBiz;
-import com.sx.table.common.ColumnInfo;
-import com.sx.table.common.MyException;
 import com.sx.table.common.Result;
-import com.sx.table.common.TableFormat;
-import com.sx.table.core.dao.nativesql.NativeSqlFromEM;
-import com.sx.table.core.dao.jpa.TableFormatRepository;
+import com.sx.table.common.model.TableFormat;
+import com.sx.table.core.dao.NativeSqlFromEM;
+import com.sx.table.core.repository.TableFormatRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +47,20 @@ public class TableController {
         }
     }
 
-    @RequestMapping("tableformat/desctable(em)")
+
+    @RequestMapping("/showtables")
+    @ResponseBody
+    public Object showTables(@Param("databaseName") String databaseName) {
+        try {
+            List<HashMap<String, String>> hashMaps = tableBiz.showTables(databaseName);
+            return new Result(hashMaps, true, "获取数据库表成功");
+        } catch (Exception e) {
+            logger.error("TableController[showTableFormat]", e);
+            return new Result(false, "获取数据库表失败");
+        }
+    }
+
+    @RequestMapping("tableformat/desctable")
     @ResponseBody
     public Object descTable(@Param("tableName") String tablename) {
         try {
@@ -61,24 +72,11 @@ public class TableController {
     }
     }
 
-
-    @RequestMapping("/showtables")
-    @ResponseBody
-    public Object showTables(@Param("databaseName") String databaseName) {
-        try {
-        List<HashMap<String, String>> hashMaps = tableBiz.showTables(databaseName);
-            return new Result(hashMaps, true, "获取数据库表成功");
-        } catch (Exception e) {
-            logger.error("TableController[showTableFormat]",e);
-            return new Result(false, "获取数据库表失败");
-        }
-    }
-
-    @RequestMapping("/select*fromtable")
+    @RequestMapping("/selectfromtable")
     @ResponseBody
     public Result selectTable(@Param("tableName") String tableName) {
         try {
-        List<HashMap<String, String>> tableData = tableBiz.selectTable(tableName);
+            List<HashMap<String, String>> tableData = tableBiz.selectFromTable(tableName);
         return new Result(tableData, true, "获取数据库表数据成功");
         } catch (Exception e) {
             logger.error("TableController[showTableFormat]",e);
@@ -86,40 +84,42 @@ public class TableController {
         }
     }
 
-    @ResponseBody
-    @RequestMapping("/createColumn")
-    public Result createColum(@Param("columnIfo") ColumnInfo columnInfo) {
-        try {
-            Boolean result = (Boolean)tableBiz.createColumn(columnInfo);
-            if (!result) {
-                return new Result(false, "创建字段失败");
-            } else {
-                List<HashMap<String, String>> allColumn = tableBiz.getAllColumn(columnInfo.getName());
-                return new Result(allColumn, true, "创建字段成功,返回更新字段");
-            }
-        } catch (MyException e) {
-            logger.error("createColumn error", e);
-            return new Result(e.getErrorCode(), false, e.getMessage());
-        }
-    }
-
-
-    //TODO 删除前端传入的值 有些可以为空
-    @ResponseBody
-    @RequestMapping("/deleteColumn")
-    public Result deleteColumn(@Param("columnIfo") ColumnInfo columnInfo) {
-        try {
-            Boolean result = (Boolean)tableBiz.deleteColumn(columnInfo);
-            if (!result) {
-                return new Result(false, "删除字段失败");
-            } else {
-                List<HashMap<String, String>> allColumn = tableBiz.getAllColumn(columnInfo.getName());
-                return new Result(allColumn, true, "删除字段成功,返回更新字段");
-            }
-        } catch (MyException e) {
-            logger.error("createColumn error", e);
-            return new Result(e.getErrorCode(), false, e.getMessage());
-        }
-    }
 
 }
+
+
+//    @ResponseBody
+//    @RequestMapping("/createColumn")
+//    public Result createColum(@Param("columnIfo") ColumnInfo columnInfo) {
+//        try {
+//            Boolean result = (Boolean)tableBiz.createColumn(columnInfo);
+//            if (!result) {
+//                return new Result(false, "创建字段失败");
+//            } else {
+//                List<HashMap<String, String>> allColumn = tableBiz.getAllColumn(columnInfo.getName());
+//                return new Result(allColumn, true, "创建字段成功,返回更新字段");
+//            }
+//        } catch (MyException e) {
+//            logger.error("createColumn error", e);
+//            return new Result(e.getErrorCode(), false, e.getMessage());
+//        }
+//    }
+//
+//
+//    //TODO 删除前端传入的值 有些可以为空
+//    @ResponseBody
+//    @RequestMapping("/deleteColumn")
+//    public Result deleteColumn(@Param("columnIfo") ColumnInfo columnInfo) {
+//        try {
+//            Boolean result = (Boolean)tableBiz.deleteColumn(columnInfo);
+//            if (!result) {
+//                return new Result(false, "删除字段失败");
+//            } else {
+//                List<HashMap<String, String>> allColumn = tableBiz.getAllColumn(columnInfo.getName());
+//                return new Result(allColumn, true, "删除字段成功,返回更新字段");
+//            }
+//        } catch (MyException e) {
+//            logger.error("createColumn error", e);
+//            return new Result(e.getErrorCode(), false, e.getMessage());
+//        }
+//    }

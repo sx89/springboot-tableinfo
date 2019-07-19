@@ -1,4 +1,4 @@
-package com.sx.table.core.dao.nativesql;
+package com.sx.table.core.dao;
 
 import org.springframework.beans.factory.annotation.Autowired;
 

@@ -1,4 +1,6 @@
-package com.sx.table.common;
+package com.sx.table.common.exception;
+
+import com.sx.table.common.enums.ErrorCode;
 
 /**
  * @author sunxu93@163.com

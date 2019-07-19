@@ -1,7 +1,7 @@
-package com.sx.table.core.dao.jpa;
+package com.sx.table.core.repository;
 
 
-import com.sx.table.common.TableFormat;
+import com.sx.table.common.model.TableFormat;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

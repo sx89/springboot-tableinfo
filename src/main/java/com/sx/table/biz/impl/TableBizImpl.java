@@ -1,10 +1,7 @@
 package com.sx.table.biz.impl;
 
 import com.sx.table.biz.ITableBiz;
-import com.sx.table.common.ColumnInfo;
-import com.sx.table.common.ErrorCode;
-import com.sx.table.common.MyException;
-import com.sx.table.core.dao.nativesql.NativeSqlFromEM;
+import com.sx.table.core.dao.NativeSqlFromEM;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,16 +21,6 @@ public class TableBizImpl implements ITableBiz {
 
     @Autowired
     NativeSqlFromEM nativeSqlFromEM;
-
-    @Override
-    public List<HashMap> showJoinTableData() {
-        return null;
-    }
-
-    @Override
-    public Object createTable(String tableName, List<ColumnInfo> list) {
-        return null;
-    }
 
     @Override
     public List<HashMap<String, String>> getAllColumn(String tableName) {
@@ -59,7 +46,7 @@ public class TableBizImpl implements ITableBiz {
     }
 
     @Override
-    public List<HashMap<String, String>> selectTable(String tableName) {
+    public List<HashMap<String, String>> selectFromTable(String tableName) {
         try {
             List<HashMap<String, String>> hashMaps = nativeSqlFromEM.selectTable(tableName);
             return hashMaps;
@@ -70,46 +57,50 @@ public class TableBizImpl implements ITableBiz {
         }
     }
 
+}
+
+
+//字段功能过于危险,暂时不开发
+
 //    mysql修改字段名：
 //    ALTER  TABLE 表名 CHANGE 旧字段名 新字段名 新数据类型;
 //    alter  table table1 change column1 column1 varchar(100) DEFAULT 1.2 COMMENT '注释'; -- 正常，此时字段名称没有改变，能修改字段类型、类型长度、默认值、注释
 //    alter  table table1 change column1 column2 decimal(10,1) DEFAULT NULL COMMENT '注释' -- 正常，能修改字段名、字段类型、类型长度、默认值、注释
 //    alter  table table1 change column2 column1 decimal(10,1) DEFAULT NULL COMMENT '注释' -- 正常，能修改字段名、字段类型、类型长度、默认值、注释
-
-    @Override
-    public Boolean createColumn(ColumnInfo columnInfo) throws MyException {
-        if (columnInfo == null) {
-            logger.error("字段信息不能为空", new MyException(ErrorCode.ERROR_PARAM_NULL));
-            return false;
-        }
-        try {
-            nativeSqlFromEM.createColum(columnInfo);
-            return true;
-        } catch (Exception e) {
-            logger.error("创建字段失败", e);
-            return false;
-        }
-    }
-
-    @Override
-    public Boolean updateColumn(ColumnInfo columnInfo) {
-        return null;
-
-
-    }
-
-    @Override
-    public Boolean deleteColumn(ColumnInfo columnInfo) {
-        if (columnInfo == null) {
-            logger.error("字段信息不能为空", new MyException(ErrorCode.ERROR_PARAM_NULL));
-            return false;
-        }
-        try {
-            nativeSqlFromEM.deleteColumn(columnInfo);
-            return true;
-        } catch (Exception e) {
-            logger.error("删除字段失败", e);
-            return false;
-        }
-    }
-}
+//
+//    @Override
+//    public Boolean createColumn(ColumnInfo columnInfo) throws MyException {
+//        if (columnInfo == null) {
+//            logger.error("字段信息不能为空", new MyException(ErrorCode.ERROR_PARAM_NULL));
+//            return false;
+//        }
+//        try {
+//            nativeSqlFromEM.createColum(columnInfo);
+//            return true;
+//        } catch (Exception e) {
+//            logger.error("创建字段失败", e);
+//            return false;
+//        }
+//    }
+//
+//    @Override
+//    public Boolean updateColumn(ColumnInfo columnInfo) {
+//        return null;
+//
+//
+//    }
+//
+//    @Override
+//    public Boolean deleteColumn(ColumnInfo columnInfo) {
+//        if (columnInfo == null) {
+//            logger.error("字段信息不能为空", new MyException(ErrorCode.ERROR_PARAM_NULL));
+//            return false;
+//        }
+//        try {
+//            nativeSqlFromEM.deleteColumn(columnInfo);
+//            return true;
+//        } catch (Exception e) {
+//            logger.error("删除字段失败", e);
+//            return false;
+//        }
+//    }

@@ -1,4 +1,4 @@
-package com.sx.table.common;
+package com.sx.table.common.model;
 
 
 import lombok.ToString;

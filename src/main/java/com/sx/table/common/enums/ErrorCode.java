@@ -1,4 +1,4 @@
-package com.sx.table.common;
+package com.sx.table.common.enums;
 
 import org.apache.commons.lang.StringUtils;
 

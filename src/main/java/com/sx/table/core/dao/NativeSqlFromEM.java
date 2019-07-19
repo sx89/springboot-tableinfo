@@ -1,8 +1,8 @@
-package com.sx.table.core.dao.nativesql;
+package com.sx.table.core.dao;
 
-import com.sx.table.common.ColumnInfo;
-import com.sx.table.common.ErrorCode;
-import com.sx.table.common.MyException;
+import com.sx.table.common.enums.ErrorCode;
+import com.sx.table.common.exception.MyException;
+import com.sx.table.common.model.ColumnInfo;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,4 +1,4 @@
-package com.sx.table.common;
+package com.sx.table.common.model;
 
 /**
  * 增删改字段所需要的字段信息
