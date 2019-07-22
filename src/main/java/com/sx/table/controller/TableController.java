@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 展示数据表每个字段的格式和名称
@@ -86,6 +86,28 @@ public class TableController {
 
 
     }
+
+    @RequestMapping("/searchTableLikeStr")
+    @ResponseBody
+    public Result searchTableLikeStr(@RequestParam("tableNameSubStr") String findStr) {
+        try {
+            List<HashMap<String, String>> hashMaps = tableBiz.showTables(null);
+            Iterator<HashMap<String, String>> iterator = hashMaps.iterator();
+            while (iterator.hasNext()) {
+                HashMap<String, String> next = iterator.next();
+                String tableName = next.get("tableName");
+                if (!tableName.contains(findStr)) {
+                    iterator.remove();
+
+                }
+            }
+            return new Result(hashMaps, true, "模糊筛选成功");
+        } catch (Exception e) {
+            logger.error("获取模糊匹配数据库表失败",e);
+            return new Result(false, "获取模糊匹配数据库表失败");
+        }
+    }
+
 
 
 }
